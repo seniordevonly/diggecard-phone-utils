@@ -1,17 +1,15 @@
 package com.realtap.phone;
 
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.Phonenumber;
 import com.realtap.phone.beans.PhoneNumberHolder;
 import com.realtap.phone.exceptions.PhoneNumberParsingException;
 import com.realtap.phone.utils.PhoneNumberUtils;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.Phonenumber;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.realtap.phone.utils.PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize;
-import static com.realtap.phone.utils.PhoneNumberUtils.isPossibleFullPhoneNumber;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -20,6 +18,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static com.realtap.phone.utils.PhoneNumberUtils.*;
+
 
 public class PhoneNumberUtilsUnitTest {
 
@@ -194,7 +194,7 @@ public class PhoneNumberUtilsUnitTest {
         assertFalse(PhoneNumberUtils.areNationalNumbersSame("16508393890", "Check Balance"));
         assertTrue(PhoneNumberUtils.areNationalNumbersSame("+380968340152", "+380968340152"));
 
-       // assertTrue(com.bipper.phone.utils.PhoneNumberUtils.areNationalNumbersSame("+*$(),#p", "+*$(),#p"));
+        // assertTrue(com.bipper.phone.utils.PhoneNumberUtils.areNationalNumbersSame("+*$(),#p", "+*$(),#p"));
     }
 
     @Test(expected = PhoneNumberParsingException.class)
@@ -223,38 +223,38 @@ public class PhoneNumberUtilsUnitTest {
     private void shouldAppendTheCountryCodeIfMissingHelper(String number){
         String prefix = number.substring(0, number.indexOf('-'));
         String phone = number.substring(number.indexOf('-')+1);
-        String phoneNumber = appendCountryCodeIfMissingAndNormalize(phone, prefix);
+        String phoneNumber = PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize(phone, prefix);
         assertNotNull(phoneNumber);
     }
 
     @Test(expected = PhoneNumberParsingException.class)
     public void appendCountryCodeIfMissingAndNormalizeFail1(){
-        appendCountryCodeIfMissingAndNormalize("Thomas Ukraine", "+47");
+        PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize("Thomas Ukraine", "+47");
     }
 
     @Test(expected = PhoneNumberParsingException.class)
     public void appendCountryCodeIfMissingAndNormalizeFail2(){
-        appendCountryCodeIfMissingAndNormalize("636977529", "+47");
+        PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize("636977529", "+47");
     }
 
     @Test(expected = PhoneNumberParsingException.class)
     public void appendCountryCodeIfMissingAndNormalize_null(){
-        appendCountryCodeIfMissingAndNormalize(null, null);
+        PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize(null, null);
     }
 
     @Test(expected = PhoneNumberParsingException.class)
     public void appendCountryCodeIfMissingAndNormalize_empty(){
-        appendCountryCodeIfMissingAndNormalize("", "");
+        PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize("", "");
     }
 
     @Test
     public void appendCountryCodeIfMissingAndNormalize_norwegianNumberWithDouble00AndSuggestAmericanCountryCode(){
-        assertEquals("+4790022909", appendCountryCodeIfMissingAndNormalize("004790022909", "1"));
+        assertEquals("+4790022909", PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize("004790022909", "1"));
     }
 
     @Test
     public void appendCountryCodeIfMissingAndNormalize_norwegianNumberWithDouble00AndSuggestNorwegianCountryCode(){
-        assertEquals("+4790022909", appendCountryCodeIfMissingAndNormalize("004790022909", "+47"));
+        assertEquals("+4790022909", PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize("004790022909", "+47"));
     }
 
     @Test
@@ -265,8 +265,8 @@ public class PhoneNumberUtilsUnitTest {
 
     @Test
     public void appendCountryCodeIfMissingAndNormalizeWithNorwegianNumbers(){
-        assertEquals("+4745037118", appendCountryCodeIfMissingAndNormalize("45037118", "+47"));
-        assertEquals("+380636977529", appendCountryCodeIfMissingAndNormalize("636977529", "+380"));
+        assertEquals("+4745037118", PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize("45037118", "+47"));
+        assertEquals("+380636977529", PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize("636977529", "+380"));
     }
 
     @Test
@@ -376,19 +376,19 @@ public class PhoneNumberUtilsUnitTest {
 
     @Test
     public void testInvalidAmericanNumber(){
-        boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+11323456716");
+        boolean isValidPhoneNumber = PhoneNumberUtils.isPossibleFullPhoneNumber("+11323456716");
         assertFalse(isValidPhoneNumber);
     }
 
     @Test
     public void testValidBritishNumber(){
-        boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+4407956185515");
+        boolean isValidPhoneNumber = PhoneNumberUtils.isPossibleFullPhoneNumber("+4407956185515");
         assertTrue(isValidPhoneNumber);
     }
 
     @Test
     public void testInvalidUkrainianNumber(){
-        boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+380555555");
+        boolean isValidPhoneNumber = PhoneNumberUtils.isPossibleFullPhoneNumber("+380555555");
         assertTrue(isValidPhoneNumber);
 
         String normalized = PhoneNumberUtils.normalizePhoneNumber("+380555555");
@@ -399,7 +399,7 @@ public class PhoneNumberUtilsUnitTest {
 
     @Test
     public void testIvoCoastnNumber(){
-        boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+22507015299");
+        boolean isValidPhoneNumber = PhoneNumberUtils.isPossibleFullPhoneNumber("+22507015299");
         assertTrue(isValidPhoneNumber);
 
         String normalized = PhoneNumberUtils.normalizePhoneNumber("++22507015299");
@@ -425,28 +425,28 @@ public class PhoneNumberUtilsUnitTest {
         boolean isValid = PhoneNumberUtils.isValidFullPhoneNumberHelper(fullAustralianNumber);
         assertTrue(isValid);
     }
-    
+
     @Test
     public void testValidUkrainianNumber(){
-        boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+380972609090");
+        boolean isValidPhoneNumber = PhoneNumberUtils.isPossibleFullPhoneNumber("+380972609090");
         assertTrue(isValidPhoneNumber);
     }
 
     @Test
     public void testInvalidUkrainianNumber1(){
-        boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+380ffffff");
+        boolean isValidPhoneNumber = PhoneNumberUtils.isPossibleFullPhoneNumber("+380ffffff");
         assertFalse(isValidPhoneNumber);
     }
 
     @Test
     public void testInvalidUkrainianNumber2(){
-        boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+380FFFFFF");
+        boolean isValidPhoneNumber = PhoneNumberUtils.isPossibleFullPhoneNumber("+380FFFFFF");
         assertFalse(isValidPhoneNumber);
     }
 
     @Test
     public void testInvalidNullNumber(){
-        boolean isValidPhoneNumber = isPossibleFullPhoneNumber(null);
+        boolean isValidPhoneNumber = PhoneNumberUtils.isPossibleFullPhoneNumber(null);
         assertFalse(isValidPhoneNumber);
     }
 
@@ -455,7 +455,7 @@ public class PhoneNumberUtilsUnitTest {
      */
     @Test
     public void testValidCotedIvoireNumber() {
-        boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+22507015299");
+        boolean isValidPhoneNumber = PhoneNumberUtils.isPossibleFullPhoneNumber("+22507015299");
         assertTrue(isValidPhoneNumber);
     }
 
@@ -464,7 +464,7 @@ public class PhoneNumberUtilsUnitTest {
      */
     @Test
     public void testInvalidCotedIvoireNumber() {
-        boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+2257015299");
+        boolean isValidPhoneNumber = PhoneNumberUtils.isPossibleFullPhoneNumber("+2257015299");
         assertFalse(isValidPhoneNumber);
     }
 
@@ -575,7 +575,7 @@ public class PhoneNumberUtilsUnitTest {
 
     @Test
     public void norwegianNumberWithoutCountryCodeValid(){
-        assertFalse(isPossibleFullPhoneNumber("45037118"));
+        assertFalse(PhoneNumberUtils.isPossibleFullPhoneNumber("45037118"));
     }
 
     @Test
@@ -688,14 +688,14 @@ public class PhoneNumberUtilsUnitTest {
 
     @Test
     public void checkValidNumberTestNumber(){
-        assertFalse(isPossibleFullPhoneNumber("+1 1111122222"));
+        assertFalse(PhoneNumberUtils.isPossibleFullPhoneNumber("+1 1111122222"));
     }
 
     @Test
     public void isValidFullPhoneNumberHelper(){
         String phoneNumber = "+476508393890";
         assertFalse(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
-        assertFalse(isPossibleFullPhoneNumber(phoneNumber));
+        assertFalse(PhoneNumberUtils.isPossibleFullPhoneNumber(phoneNumber));
 
         Phonenumber.PhoneNumber phoneNumber1 = PhoneNumberUtils.getPhoneNumberObjFromFullPhoneNumberAddPlusPrefixIfNotExist(phoneNumber);
         assertNotNull(phoneNumber1);
@@ -706,7 +706,7 @@ public class PhoneNumberUtilsUnitTest {
     public void shouldParseAsAmericanConnecticutNumber(){
         String phoneNumber = "2038101279";
         assertFalse(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
-        assertFalse(isPossibleFullPhoneNumber(phoneNumber));
+        assertFalse(PhoneNumberUtils.isPossibleFullPhoneNumber(phoneNumber));
 
         // should throw exception
         PhoneNumberUtils.getPhoneNumberObjFromFullPhoneNumberAddPlusPrefixIfNotExist(phoneNumber);
@@ -724,56 +724,56 @@ public class PhoneNumberUtilsUnitTest {
     public void invalidButPossibleItalianNumberWithLeadingZero(){
         String phoneNumber = "+39055555555";
         assertTrue(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
-        assertTrue(isPossibleFullPhoneNumber(phoneNumber));
+        assertTrue(PhoneNumberUtils.isPossibleFullPhoneNumber(phoneNumber));
     }
 
     @Test
     public void invalidButPossibleNorwegianNumberWithLeadingZero(){
         String phoneNumber = "+4708888888";
         assertFalse(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
-        assertTrue(isPossibleFullPhoneNumber(phoneNumber));
+        assertTrue(PhoneNumberUtils.isPossibleFullPhoneNumber(phoneNumber));
     }
 
     @Test
     public void bothValidAndPossibleBritishNumberWithLeadingZero(){
         String phoneNumber = "+4407956185515";
         assertTrue(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
-        assertTrue(isPossibleFullPhoneNumber(phoneNumber));
+        assertTrue(PhoneNumberUtils.isPossibleFullPhoneNumber(phoneNumber));
     }
 
     @Test
     public void bothValidAndPossibleNorwegianNumber(){
         String phoneNumber = "+4745037118";
         assertTrue(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
-        assertTrue(isPossibleFullPhoneNumber(phoneNumber));
+        assertTrue(PhoneNumberUtils.isPossibleFullPhoneNumber(phoneNumber));
     }
 
     @Test
     public void bothValidAndPossibleUkrainanNumber(){
         String phoneNumber = "+380636977529";
         assertTrue(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
-        assertTrue(isPossibleFullPhoneNumber(phoneNumber));
+        assertTrue(PhoneNumberUtils.isPossibleFullPhoneNumber(phoneNumber));
     }
 
     @Test
     public void neitherValidNorPossibleUkrainanNumberSinceItIsWithoutPlus(){
         String phoneNumber = "380636977529";
         assertFalse(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
-        assertFalse(isPossibleFullPhoneNumber(phoneNumber));
+        assertFalse(PhoneNumberUtils.isPossibleFullPhoneNumber(phoneNumber));
     }
 
     @Test
     public void isPossibleButNotValidUkrainanPhoneNumber(){
         String phoneNumber = "+380555555 ";
         assertFalse(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
-        assertTrue(isPossibleFullPhoneNumber(phoneNumber));
+        assertTrue(PhoneNumberUtils.isPossibleFullPhoneNumber(phoneNumber));
     }
 
     @Test
     public void isPossibleButNotValidUkrainanPhoneNumber2(){
         String phoneNumber = "+14156682 ";
         assertFalse(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
-        assertTrue(isPossibleFullPhoneNumber(phoneNumber));
+        assertTrue(PhoneNumberUtils.isPossibleFullPhoneNumber(phoneNumber));
     }
 
     @Test
@@ -789,7 +789,7 @@ public class PhoneNumberUtilsUnitTest {
 
     @Test
     public void isKhazakstanPhoneNumberPossible(){
-        assertTrue(isPossibleFullPhoneNumber("+77012118888"));
+        assertTrue(PhoneNumberUtils.isPossibleFullPhoneNumber("+77012118888"));
     }
 
     @Test
@@ -806,5 +806,24 @@ public class PhoneNumberUtilsUnitTest {
 
         assertEquals("46", PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("+4645037118"));
         assertEquals("47", PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("+4790630185"));
+    }
+
+    @Test
+    public void generateFullPhoneNumber() {
+
+        assertEquals("+4745454545", PhoneNumberUtils.generateFullPhoneNumber("+47", "45 45 45 45"));
+        assertEquals("+4745454545", PhoneNumberUtils.generateFullPhoneNumber("+47", "+47 45 45 45 45"));
+        assertEquals("+4745454545", PhoneNumberUtils.generateFullPhoneNumber("+47", "+4745454545"));
+        assertEquals("+4645454545", PhoneNumberUtils.generateFullPhoneNumber("+47", "+46 45 45 45 45"));
+        assertEquals("+4745454545", PhoneNumberUtils.generateFullPhoneNumber("+47", "4745 45 45 45"));
+        assertEquals("+4545454565565665", PhoneNumberUtils.generateFullPhoneNumber("+47", "+45 45 45 45 65 565665")); // not valid number
+
+        assertTrue(PhoneNumberUtils.generateFullPhoneNumber("+47", "a lot of scrambed text").isEmpty());
+        assertTrue(PhoneNumberUtils.generateFullPhoneNumber("+47", "").isEmpty());
+        assertTrue(PhoneNumberUtils.generateFullPhoneNumber("+47", "  ").isEmpty());
+        assertTrue(PhoneNumberUtils.generateFullPhoneNumber("", "  ").isEmpty());
+        assertNull(PhoneNumberUtils.generateFullPhoneNumber("+47", null));
+
+        assertNull(PhoneNumberUtils.generateFullPhoneNumber(null, null));
     }
 }

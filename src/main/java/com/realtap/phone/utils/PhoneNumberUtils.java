@@ -1,45 +1,48 @@
 package com.realtap.phone.utils;
 
+
+import com.realtap.phone.beans.PhoneNumberHolder;
+import com.realtap.phone.exceptions.PhoneNumberParsingException;
 import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
-import com.realtap.phone.beans.PhoneNumberHolder;
-import com.realtap.phone.exceptions.PhoneNumberParsingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class PhoneNumberUtils {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(PhoneNumberUtils.class);
+    private static Logger log = LoggerFactory.getLogger(PhoneNumberUtils.class);
 
     private static final String EMPTY_COUNTRY_CODE = "null";
     private static final String UNKNOWN_REGION = "ZZ";
     private static final String JUST_NUMBERS = "[^\\w\\s\\.]";
 
+    static com.google.i18n.phonenumbers.PhoneNumberUtil phoneUtil;
+
+    static {
+        phoneUtil =
+                com.google.i18n.phonenumbers.PhoneNumberUtil.getInstance();
+    }
 
     public static Phonenumber.PhoneNumber parsePhoneByGoogle(String phone, String country) {
-        com.google.i18n.phonenumbers.PhoneNumberUtil phoneUtil =
-                com.google.i18n.phonenumbers.PhoneNumberUtil.getInstance();
+
         try {
-            Phonenumber.PhoneNumber phoneNumber = phoneUtil.parse(phone, country);
-            return phoneNumber;
+            return phoneUtil.parse(phone, country);
 
         } catch (NumberParseException e) {
-            LOGGER.warn(e.getMessage()+" country: "+country+" phone: "+phone);
+            log.warn(e.getMessage() + " country: " + country + " phone: " + phone);
         }
         return null;
     }
 
     public static String getCountryCodeFromFullPhoneNumber(String fullPhoneNumber) {
         try {
-            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-            PhoneNumber phoneNumber = phoneNumberUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
+
+            PhoneNumber phoneNumber = phoneUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
             return String.valueOf(phoneNumber.getCountryCode());
         } catch (NumberParseException e) {
             throw new PhoneNumberParsingException(e);
@@ -47,10 +50,9 @@ public class PhoneNumberUtils {
     }
 
     public static boolean isItalianOrUnknownNumber(String fullPhoneNumber) {
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         PhoneNumber phoneNumber = null;
         try {
-            phoneNumber = phoneNumberUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
+            phoneNumber = phoneUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
         } catch (NumberParseException e) {
             return true;
         }
@@ -59,8 +61,7 @@ public class PhoneNumberUtils {
 
     public static String getCountryCodeWithPlusSignFromFullPhoneNumber(String fullPhoneNumber) {
         try {
-            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-            PhoneNumber phoneNumber = phoneNumberUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
+            PhoneNumber phoneNumber = phoneUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
             return "+" + String.valueOf(phoneNumber.getCountryCode());
         } catch (NumberParseException e) {
             throw new PhoneNumberParsingException(e);
@@ -69,8 +70,7 @@ public class PhoneNumberUtils {
 
     public static String getPhoneNumberWithoutCountryCodeFromFullPhoneNumber(String fullPhoneNumber) {
         try {
-            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-            PhoneNumber phoneNumber = phoneNumberUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
+            PhoneNumber phoneNumber = phoneUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
             StringBuilder nationalNumber = new StringBuilder();
             if (phoneNumber.isItalianLeadingZero()){
                 nationalNumber.append("0");
@@ -85,8 +85,7 @@ public class PhoneNumberUtils {
     public static PhoneNumber getPhoneNumberObjFromFullPhoneNumber(String fullPhoneNumber) {
 
         try {
-            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-            return  phoneNumberUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
+            return  phoneUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
         } catch (NumberParseException e) {
             throw new PhoneNumberParsingException(e);
         }
@@ -103,11 +102,7 @@ public class PhoneNumberUtils {
             Long number1 = getNationalNumber(phone1);
             Long number2 = getNationalNumber(phone2);
 
-            if(number1 == null || number2 == null) {
-                return false;
-            }
-
-            return number1.equals(number2);
+            return !(number1 == null || number2 == null) && number1.equals(number2);
 
         }catch(PhoneNumberParsingException e){
             return false;
@@ -168,11 +163,48 @@ public class PhoneNumberUtils {
         }
     }
 
+    public static String generateFullPhoneNumber(String defaultPhonePrefix, String inputPhoneNumber) {
+
+        if(inputPhoneNumber == null) {
+            return null;
+        }
+
+        // else, remove all eventual invalid characters
+        inputPhoneNumber = removeNonInteger(inputPhoneNumber);
+
+        // first check if already valid number
+        if(isValidFullPhoneNumberHelper(inputPhoneNumber)) {
+            return inputPhoneNumber;
+        }
+
+        // check if then valid
+        if(isValidFullPhoneNumberHelper(inputPhoneNumber)) {
+            return inputPhoneNumber;
+        }
+
+        try {
+
+            String region = phoneUtil.getRegionCodeForCountryCode(Integer.parseInt(defaultPhonePrefix));
+            PhoneNumber phoneNumber = phoneUtil.parse(inputPhoneNumber, region);
+            long phonePrefix = phoneNumber.getCountryCode();
+            long nationalNumber = phoneNumber.getNationalNumber();
+
+            return "+"+phonePrefix + nationalNumber;
+
+        } catch (NumberParseException e) {
+            log.error(e.getMessage(), e);
+        } catch (NumberFormatException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        // we give up
+        return inputPhoneNumber;
+    }
+
     public static boolean isValidFullPhoneNumberHelper(String fullPhoneNumber){
         try {
-            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-            PhoneNumber phoneNumber = phoneNumberUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
-            return phoneNumberUtil.isValidNumber(phoneNumber);
+            PhoneNumber phoneNumber = phoneUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
+            return phoneUtil.isValidNumber(phoneNumber);
         } catch (NumberParseException e) {
             return false;
         }
@@ -192,26 +224,25 @@ public class PhoneNumberUtils {
         }
 
         try {
-            PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
-            PhoneNumber phoneNumber = phoneNumberUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
-            return phoneNumberUtil.isPossibleNumber(phoneNumber);
+            PhoneNumber phoneNumber = phoneUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
+            return phoneUtil.isPossibleNumber(phoneNumber);
         } catch (NumberParseException e) {
             return false;
         }
     }
 
     public static String normalizePhoneNumber(String phoneNumber) {
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+
         PhoneNumber pNumber = null;
         try {
-            pNumber = phoneNumberUtil.parse(phoneNumber, UNKNOWN_REGION);
+            pNumber = phoneUtil.parse(phoneNumber, UNKNOWN_REGION);
         } catch (NumberParseException e) {
-            LOGGER.debug("bad  number:" + phoneNumber);
+            log.debug("bad  number:" + phoneNumber);
             throw new PhoneNumberParsingException("phone number invalid: " + phoneNumber);
         }
-        phoneNumber = phoneNumberUtil.format(pNumber, PhoneNumberFormat.E164);
+        phoneNumber = phoneUtil.format(pNumber, PhoneNumberFormat.E164);
 
-        if (!phoneNumberUtil.isPossibleNumber(pNumber)) {
+        if (!phoneUtil.isPossibleNumber(pNumber)) {
             throw new PhoneNumberParsingException("phone number invalid: " + phoneNumber);
         }
 
@@ -247,38 +278,36 @@ public class PhoneNumberUtils {
             phoneNumber = "+"+phoneNumber.substring(2);
         }
 
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         String countryCodeNum;
         String region = null;
         if(phoneCountryCode != null && !phoneCountryCode.isEmpty()){
             countryCodeNum = phoneCountryCode.replaceAll(JUST_NUMBERS, "");
-            region = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCodeNum));
+            region = phoneUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCodeNum));
         }
 
         PhoneNumber pNumber = null;
         try {
-            pNumber = phoneNumberUtil.parse(phoneNumber, region);
+            pNumber = phoneUtil.parse(phoneNumber, region);
         } catch (NumberParseException e) {
-            LOGGER.debug("bad  region: " + region + ",  or number:" + phoneNumber);
+            log.debug("bad  region: " + region + ",  or number:" + phoneNumber);
             throw new PhoneNumberParsingException("phone number invalid: " + phoneNumber);
             //return phoneCountryCode.charAt(0) == '+' ? phoneCountryCode + phoneNumber : "+" + phoneCountryCode + phoneNumber;
         }
 
-        if (!phoneNumberUtil.isPossibleNumber(pNumber)) {
+        if (!phoneUtil.isPossibleNumber(pNumber)) {
             throw new PhoneNumberParsingException("phone number invalid: " + phoneNumber);
         }
 
-        phoneNumber = phoneNumberUtil.format(pNumber, PhoneNumberFormat.E164);
+        phoneNumber = phoneUtil.format(pNumber, PhoneNumberFormat.E164);
         return phoneNumber;
     }
 
     public static String getPhoneWithoutCountryCode(String phoneNumber, String countryCode) {
-        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
         String countryCodeNum = countryCode.replaceAll(JUST_NUMBERS, "");
-        String region = phoneNumberUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCodeNum));
+        String region = phoneUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCodeNum));
         PhoneNumber pNumber = null;
         try {
-            pNumber = phoneNumberUtil.parse(phoneNumber, region);
+            pNumber = phoneUtil.parse(phoneNumber, region);
         } catch (NumberParseException e) {
             throw new PhoneNumberParsingException("phone number error: " + phoneNumber);
         }
@@ -376,9 +405,8 @@ public class PhoneNumberUtils {
                 return new PhoneNumberHolder(null, "");
             }
             if (phoneNumber.startsWith(EMPTY_COUNTRY_CODE)) {
-                countryCode = null;
                 shortPhoneNumber = phoneNumber.split(EMPTY_COUNTRY_CODE)[1];
-                return new PhoneNumberHolder(countryCode, shortPhoneNumber);
+                return new PhoneNumberHolder(null, shortPhoneNumber);
             }
             else{
                 return new PhoneNumberHolder(null, phoneNumber);
@@ -409,7 +437,7 @@ public class PhoneNumberUtils {
         try{
             return new Long(s);
         }catch (NumberFormatException e){
-            LOGGER.error(e.getMessage());
+            log.error(e.getMessage());
             return null;
         }
     }
