@@ -838,6 +838,42 @@ public class PhoneNumberUtilsUnitTest {
         assertTrue(PhoneNumberUtils.isPossiblePhoneNumber("+47", "4745 45 45 45"));
         assertFalse(PhoneNumberUtils.isPossiblePhoneNumber("+47", "+45 45 45 45 65 565665")); // not valid number 565665
         assertFalse(PhoneNumberUtils.isPossiblePhoneNumber("+47", "565665"));
+        assertFalse(PhoneNumberUtils.isPossiblePhoneNumber("+47", ""));
+        assertFalse(PhoneNumberUtils.isPossiblePhoneNumber("+47", null));
+    }
+
+    @Test
+    public void validatePhoneNumbers() {
+        List<String> list = new ArrayList<>();
+        list.add("45 45 45 45");
+        list.add("+47 45 45 45 46");
+        list.add(null);
+        list.add("");
+        list.add("TotallyInvalid");
+
+        // the test
+        List<String> numbers = PhoneNumberUtils.validatePhoneNumbers(list);
+
+        assertEquals(2, numbers.size());
+        assertEquals("+4745454545", numbers.get(0));
+        assertEquals("+4745454546", numbers.get(1));
+    }
+
+    @Test
+    public void validatePhoneNumbers_nullAndEmpy() {
+
+        // the test
+        {
+            List<String> numbers = PhoneNumberUtils.validatePhoneNumbers(null);
+            assertTrue(numbers.isEmpty());
+        }
+        {
+            // the test
+            List<String> numbers = PhoneNumberUtils.validatePhoneNumbers(new ArrayList<>());
+            assertTrue(numbers.isEmpty());
+        }
+
+
     }
 
     @Test

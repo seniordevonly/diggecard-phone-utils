@@ -10,9 +10,11 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class PhoneNumberUtils {
 
@@ -168,6 +170,19 @@ public class PhoneNumberUtils {
         return isPossibleFullPhoneNumber(
                 generateFullPhoneNumber(defaultPhonePrefix, inputPhoneNumber)
         );
+    }
+
+    public static List<String> validatePhoneNumbers(List<String> numbers) {
+        if(numbers == null) {
+            return new ArrayList<>();
+        }
+        return numbers.stream()
+                .filter(n -> n != null)
+                .filter(n -> !n.isEmpty())
+                .filter(n -> PhoneNumberUtils.isPossiblePhoneNumber("+47", n))
+                .distinct()
+                .map(n -> PhoneNumberUtils.generateFullPhoneNumber("+47", n))
+                .collect(Collectors.toList());
     }
 
     public static String generateFullPhoneNumber(String defaultPhonePrefix, String inputPhoneNumber) {
