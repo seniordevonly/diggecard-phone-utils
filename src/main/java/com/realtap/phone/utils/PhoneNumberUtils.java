@@ -10,6 +10,7 @@ import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -415,6 +416,25 @@ public class PhoneNumberUtils {
         }
     }
 
+    /**
+     * Returns a nicely printed string representing the list give as input
+     * @param numbers a list of numbers
+     * @return nicely printed string like: +4745037118, +90630185
+     */
+    public static String prettyPrintNumbers(List<String> numbers) {
+        if(numbers == null || numbers.isEmpty()) {
+            return "";
+        }
+
+        String str = "";
+        for(int i=0; i < numbers.size(); i++) {
+            str += numbers.get(i);
+            if(i != numbers.size()-1) {
+                str += ", ";
+            }
+        }
+        return str;
+    }
 
     /**
      * Replace all non int characters with "" except for +

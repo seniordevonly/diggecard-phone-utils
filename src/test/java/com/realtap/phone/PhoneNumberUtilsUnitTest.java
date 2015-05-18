@@ -9,6 +9,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -825,5 +827,20 @@ public class PhoneNumberUtilsUnitTest {
         assertNull(PhoneNumberUtils.generateFullPhoneNumber("+47", null));
 
         assertNull(PhoneNumberUtils.generateFullPhoneNumber(null, null));
+    }
+
+    @Test
+    public void prettyPrintNumbers() {
+        assertEquals("+4745037118", PhoneNumberUtils.prettyPrintNumbers(createList("+4745037118")));
+        assertEquals("+4745037118, +4790630185", PhoneNumberUtils.prettyPrintNumbers(createList("+4745037118", "+4790630185")));
+        assertEquals("+4745037118, +4790630185, +4745454545", PhoneNumberUtils.prettyPrintNumbers(createList("+4745037118", "+4790630185", "+4745454545")));
+        assertEquals("", PhoneNumberUtils.prettyPrintNumbers(null));
+        assertEquals("", PhoneNumberUtils.prettyPrintNumbers(new ArrayList<>()));
+    }
+
+    private static List<String> createList(String...strings) {
+        List<String> list = new ArrayList<>();
+        Collections.addAll(list, strings);
+        return list;
     }
 }
