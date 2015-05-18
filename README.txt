@@ -1,3 +1,6 @@
+# Git repo here:
+git clone ssh://git@dev.realtap.com:2222/phone-utils
+
 # Install Apache Maven
 https://maven.apache.org/download.cgi
 
