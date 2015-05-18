@@ -8,7 +8,7 @@
 
     <scm>
         <connection>scm:git:ssh://git@dev.realtap.com:2222/phone-utils</connection>
-        <url>scm:git:ssh://git@dev.realtap.com:2222/phone-utils</url>
+        <url>scm:git:ssh://git@ev.realtap.com:2222/phone-utils</url>
         <tag>HEAD</tag>
     </scm>
 
