@@ -166,8 +166,8 @@ public class PhoneNumberUtils {
         }
     }
 
-    public static boolean isPossiblePhoneNumber(String defaultPhonePrefix, String inputPhoneNumber) {
-        return isPossibleFullPhoneNumber(
+    public static boolean isValidPhoneNumber(String defaultPhonePrefix, String inputPhoneNumber) {
+        return isValidFullPhoneNumberHelper(
                 generateFullPhoneNumber(defaultPhonePrefix, inputPhoneNumber)
         );
     }
@@ -179,7 +179,7 @@ public class PhoneNumberUtils {
         return numbers.stream()
                 .filter(n -> n != null)
                 .filter(n -> !n.isEmpty())
-                .filter(n -> PhoneNumberUtils.isPossiblePhoneNumber("+47", n))
+                .filter(n -> PhoneNumberUtils.isValidPhoneNumber("+47", n))
                 .distinct()
                 .map(n -> PhoneNumberUtils.generateFullPhoneNumber("+47", n))
                 .collect(Collectors.toList());
