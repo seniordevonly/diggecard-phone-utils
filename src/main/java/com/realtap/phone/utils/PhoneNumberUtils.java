@@ -164,6 +164,12 @@ public class PhoneNumberUtils {
         }
     }
 
+    public static boolean isPossiblePhoneNumber(String defaultPhonePrefix, String inputPhoneNumber) {
+        return isPossibleFullPhoneNumber(
+                generateFullPhoneNumber(defaultPhonePrefix, inputPhoneNumber)
+        );
+    }
+
     public static String generateFullPhoneNumber(String defaultPhonePrefix, String inputPhoneNumber) {
 
         if(inputPhoneNumber == null) {
@@ -192,9 +198,7 @@ public class PhoneNumberUtils {
 
             return "+"+phonePrefix + nationalNumber;
 
-        } catch (NumberParseException e) {
-            log.error(e.getMessage(), e);
-        } catch (NumberFormatException e) {
+        } catch (NumberParseException | NumberFormatException e) {
             log.error(e.getMessage(), e);
         }
 

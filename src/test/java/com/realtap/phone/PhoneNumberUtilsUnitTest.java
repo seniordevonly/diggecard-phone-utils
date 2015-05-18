@@ -830,6 +830,17 @@ public class PhoneNumberUtilsUnitTest {
     }
 
     @Test
+    public void isPossiblePhoneNumber() {
+        assertTrue(PhoneNumberUtils.isPossiblePhoneNumber("+47", "45 45 45 45"));
+        assertTrue(PhoneNumberUtils.isPossiblePhoneNumber("+47", "+47 45 45 45 45"));
+        assertTrue(PhoneNumberUtils.isPossiblePhoneNumber("+47", "+4745454545"));
+        assertTrue(PhoneNumberUtils.isPossiblePhoneNumber("+47", "+46 45 45 45 45"));
+        assertTrue(PhoneNumberUtils.isPossiblePhoneNumber("+47", "4745 45 45 45"));
+        assertFalse(PhoneNumberUtils.isPossiblePhoneNumber("+47", "+45 45 45 45 65 565665")); // not valid number 565665
+        assertFalse(PhoneNumberUtils.isPossiblePhoneNumber("+47", "565665"));
+    }
+
+    @Test
     public void prettyPrintNumbers() {
         assertEquals("+4745037118", PhoneNumberUtils.prettyPrintNumbers(createList("+4745037118")));
         assertEquals("+4745037118, +4790630185", PhoneNumberUtils.prettyPrintNumbers(createList("+4745037118", "+4790630185")));
