@@ -4,12 +4,12 @@
 
     <groupId>com.realtap</groupId>
     <artifactId>phone-utils</artifactId>
-    <version>1.7</version>
+    <version>1.8-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:ssh://git@dev.realtap.com:2222/phone-utils</connection>
         <url>scm:git:ssh://git@ev.realtap.com:2222/phone-utils</url>
-        <tag>phone-utils-1.7</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <repositories>
