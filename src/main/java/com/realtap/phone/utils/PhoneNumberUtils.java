@@ -199,11 +199,6 @@ public class PhoneNumberUtils {
             return inputPhoneNumber;
         }
 
-        // check if then valid
-        if(isValidFullPhoneNumberHelper(inputPhoneNumber)) {
-            return inputPhoneNumber;
-        }
-
         try {
 
             String region = phoneUtil.getRegionCodeForCountryCode(Integer.parseInt(defaultPhonePrefix));
@@ -219,6 +214,41 @@ public class PhoneNumberUtils {
 
         // we give up
         return inputPhoneNumber;
+    }
+
+    public static PhoneNumber parseNumber(String defaultPhonePrefix, String inputPhoneNumber) throws PhoneNumberParsingException {
+
+        if(inputPhoneNumber == null) {
+            throw new PhoneNumberParsingException("Input phone number is null");
+        }
+
+        // else, remove all eventual invalid characters
+        inputPhoneNumber = removeNonInteger(inputPhoneNumber);
+
+        try {
+
+            // first check if already valid number
+            if(isValidFullPhoneNumberHelper(inputPhoneNumber)) {
+                return phoneUtil.parse(inputPhoneNumber, UNKNOWN_REGION);
+            }
+
+            String region = phoneUtil.getRegionCodeForCountryCode(Integer.parseInt(defaultPhonePrefix));
+            PhoneNumber obj = phoneUtil.parse(inputPhoneNumber, region);
+            if(!isValidPhoneNumber(defaultPhonePrefix, inputPhoneNumber)) {
+                throw new PhoneNumberParsingException(String.format("Prefix: %s, national: %s are not valid number", defaultPhonePrefix, inputPhoneNumber));
+            }
+            return obj;
+
+        } catch (NumberParseException | NumberFormatException e) {
+            throw new PhoneNumberParsingException(e);
+        }
+    }
+
+    public static String formatPhoneNumber(PhoneNumber obj) {
+        if(obj == null) {
+            throw new PhoneNumberParsingException("Obj is null");
+        }
+        return "+"+obj.getCountryCode() + obj.getNationalNumber();
     }
 
     public static boolean isValidFullPhoneNumberHelper(String fullPhoneNumber){
