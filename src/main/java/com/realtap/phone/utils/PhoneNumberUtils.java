@@ -216,6 +216,20 @@ public class PhoneNumberUtils {
         return inputPhoneNumber;
     }
 
+    public static PhoneNumber parseNumber(String fullPhoneNumber, String defaultPhonePrefix, String inputPhoneNumber) throws PhoneNumberParsingException {
+
+        try {
+            // first check if already valid number
+            if(isValidFullPhoneNumberHelper(fullPhoneNumber)) {
+                return phoneUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
+            }
+            return parseNumber(defaultPhonePrefix, inputPhoneNumber);
+
+        } catch (NumberParseException e) {
+            throw new PhoneNumberParsingException(e);
+        }
+    }
+
     public static PhoneNumber parseNumber(String defaultPhonePrefix, String inputPhoneNumber) throws PhoneNumberParsingException {
 
         if(inputPhoneNumber == null) {

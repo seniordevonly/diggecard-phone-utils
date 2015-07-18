@@ -332,6 +332,9 @@ public class PhoneNumberUtilsUnitTest {
     @Test
     public void testPossibleAndValidNumbers(){
 
+        assertTrue(PhoneNumberUtils.isValidFullPhoneNumberHelper("+4645454545"));
+        assertTrue(PhoneNumberUtils.isValidFullPhoneNumberHelper("+4745454545"));
+
         {
             assertTrue(isPossibleFullPhoneNumber("+15555566666"));
             assertFalse(PhoneNumberUtils.isValidFullPhoneNumberHelper("+15555566666"));
@@ -349,7 +352,7 @@ public class PhoneNumberUtilsUnitTest {
             try{
                 appendCountryCodeIfMissingAndNormalize("+475555566666", "+47");
                 fail("should fail");
-            }catch(PhoneNumberParsingException e){
+            } catch(PhoneNumberParsingException e){
                 // should come here
             }
         }
@@ -358,7 +361,7 @@ public class PhoneNumberUtilsUnitTest {
             try{
                 appendCountryCodeIfMissingAndNormalize("*/()#/", "+47");
                 fail("should fail");
-            }catch(PhoneNumberParsingException e){
+            } catch(PhoneNumberParsingException e){
                 // should come here
             }
         }
@@ -370,7 +373,7 @@ public class PhoneNumberUtilsUnitTest {
             try{
                 appendCountryCodeIfMissingAndNormalize("45037118", null);
                 fail("Should fail");
-            }catch(PhoneNumberParsingException e){
+            } catch(PhoneNumberParsingException e){
                 // should come here
             }
         }
@@ -942,6 +945,26 @@ public class PhoneNumberUtilsUnitTest {
             assertEquals("+380", holder.getPrefix());
             assertEquals("636977529", holder.getNational());
             assertEquals("+380636977529", holder.getPhoneNumber());
+        }
+    }
+
+    @Test
+    public void parseNumber_threeParameters() {
+        {
+            Phonenumber.PhoneNumber number = PhoneNumberUtils.parseNumber("+3800636977529", "+47", "45037118");
+            assertEquals(380, number.getCountryCode());
+            assertEquals(636977529, number.getNationalNumber());
+        }
+        {
+            Phonenumber.PhoneNumber number = PhoneNumberUtils.parseNumber("+3800636977529", null, null);
+            assertEquals(380, number.getCountryCode());
+            assertEquals(636977529, number.getNationalNumber());
+        }
+
+        {
+            Phonenumber.PhoneNumber number = PhoneNumberUtils.parseNumber(null, "+380", "0636977529");
+            assertEquals(380, number.getCountryCode());
+            assertEquals(636977529, number.getNationalNumber());
         }
     }
 
