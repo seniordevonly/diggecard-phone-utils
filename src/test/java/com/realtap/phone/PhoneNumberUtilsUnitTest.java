@@ -623,44 +623,44 @@ public class PhoneNumberUtilsUnitTest {
     @Test
     public void parsePhoneNumberWhichAcceptNonNumbersStartingOnNullNotValidNumber(){
         PhoneNumberHolder holder = PhoneNumberUtils.parsePhoneNumberWhichAcceptNonNumbers("abcdefghijklmn");
-        assertNull(holder.getCountryCode());
-        assertEquals("abcdefghijklmn", holder.getShortPhoneNumber());
+        assertNull(holder.getPrefix());
+        assertEquals("abcdefghijklmn", holder.getNational());
     }
 
     @Test
     public void parsePhoneNumberWhichAcceptNonNumbersStartingOnNullValidNumber(){
         PhoneNumberHolder holder = PhoneNumberUtils.parsePhoneNumberWhichAcceptNonNumbers("+4745037118");
-        assertEquals("+47", holder.getCountryCode());
-        assertEquals("45037118", holder.getShortPhoneNumber());
+        assertEquals("+47", holder.getPrefix());
+        assertEquals("45037118", holder.getNational());
     }
 
     @Test
     public void parsePhoneNumberWhichAcceptNonNumbersStartingOnNullValidNullPrefix(){
         PhoneNumberHolder holder = PhoneNumberUtils.parsePhoneNumberWhichAcceptNonNumbers("nullBsafe");
-        assertNull(holder.getCountryCode());
-        assertEquals("Bsafe", holder.getShortPhoneNumber());
+        assertNull(holder.getPrefix());
+        assertEquals("Bsafe", holder.getNational());
     }
 
     @Test
     public void parsePhoneNumberWhichAcceptNonNumbersNullString(){
         PhoneNumberHolder holder = PhoneNumberUtils.parsePhoneNumberWhichAcceptNonNumbers("null");
-        assertNull(holder.getCountryCode());
-        assertTrue(holder.getShortPhoneNumber().isEmpty());
+        assertNull(holder.getPrefix());
+        assertTrue(holder.getNational().isEmpty());
     }
 
     @Test
     public void parsePhoneNumberWithoutCountryCode(){
 
         PhoneNumberHolder holder = PhoneNumberUtils.parsePhoneNumberWhichAcceptNonNumbers("45037118");
-        assertNull(holder.getCountryCode());
-        assertEquals("45037118", holder.getShortPhoneNumber());
+        assertNull(holder.getPrefix());
+        assertEquals("45037118", holder.getNational());
     }
 
     @Test
     public void parsePhoneNumberWhichAcceptNonNumbersNullStringWithEndingSpaces(){
         PhoneNumberHolder holder = PhoneNumberUtils.parsePhoneNumberWhichAcceptNonNumbers("null  ");
-        assertNull(holder.getCountryCode());
-        assertTrue(holder.getShortPhoneNumber().isEmpty());
+        assertNull(holder.getPrefix());
+        assertTrue(holder.getNational().isEmpty());
     }
 
     @Test
@@ -838,31 +838,11 @@ public class PhoneNumberUtilsUnitTest {
     @Test
     public void parseNumber() {
 
-        {
-            Phonenumber.PhoneNumber n1 = PhoneNumberUtils.parseNumber("+47", "45 45 45 45");
-            assertEquals(47, n1.getCountryCode());
-            assertEquals(45454545l, n1.getNationalNumber());
-        }
-        {
-            Phonenumber.PhoneNumber n2 = PhoneNumberUtils.parseNumber("+47", "+47 45 45 45 45");
-            assertEquals(47, n2.getCountryCode());
-            assertEquals(45454545l, n2.getNationalNumber());
-        }
-        {
-            Phonenumber.PhoneNumber n3 = PhoneNumberUtils.parseNumber("+47", "+4745454545");
-            assertEquals(47, n3.getCountryCode());
-            assertEquals(45454545l, n3.getNationalNumber());
-        }
-        {
-            Phonenumber.PhoneNumber n4 = PhoneNumberUtils.parseNumber("+47", "+46 45 45 45 45");
-            assertEquals(46, n4.getCountryCode());
-            assertEquals(45454545l, n4.getNationalNumber());
-        }
-        {
-            Phonenumber.PhoneNumber n5 = PhoneNumberUtils.parseNumber("+47", "4745 45 45 45");
-            assertEquals(47, n5.getCountryCode());
-            assertEquals(45454545l, n5.getNationalNumber());
-        }
+        parseNumberSuccessHelper("+47", "45 45 45 45", 47, 45454545l);
+        parseNumberSuccessHelper("+47", "+47 45 45 45 45", 47, 45454545l);
+        parseNumberSuccessHelper("+47", "+4745454545", 47, 45454545l);
+        parseNumberSuccessHelper("+47", "+46 45 45 45 45", 46, 45454545l);
+        parseNumberSuccessHelper("+47", "4745 45 45 45", 47, 45454545l);
 
         parseNumberFailureHelper("+47", "+45 45 45 45 65 565665");
         parseNumberFailureHelper("+47", "a lot of scrambed text");
@@ -873,9 +853,15 @@ public class PhoneNumberUtilsUnitTest {
         parseNumberFailureHelper(null, null);
     }
 
+    private void parseNumberSuccessHelper(String defaultPhonePrefix, String inputPhoneNumber, int prefix, long national) {
+        Phonenumber.PhoneNumber n5 = PhoneNumberUtils.parseNumber(defaultPhonePrefix, inputPhoneNumber);
+        assertEquals(prefix, n5.getCountryCode());
+        assertEquals(national, n5.getNationalNumber());
+    }
+
     private void parseNumberFailureHelper(String defaultPhonePrefix, String inputPhoneNumber) {
         try {
-            Phonenumber.PhoneNumber phoneNumber = PhoneNumberUtils.parseNumber(defaultPhonePrefix, inputPhoneNumber); // not valid number
+            PhoneNumberUtils.parseNumber(defaultPhonePrefix, inputPhoneNumber); // not valid number
             fail("Should fail");
         } catch (PhoneNumberParsingException e) {
             assertNotNull(e);
@@ -938,17 +924,27 @@ public class PhoneNumberUtilsUnitTest {
         assertEquals("", PhoneNumberUtils.prettyPrintNumbers(new ArrayList<>()));
     }
 
+    @Test
+    public void formatPhoneNumber() {
+        assertEquals("+4745037118", PhoneNumberUtils.formatPhoneNumber(PhoneNumberUtils.parseNumber("+47", "45037118")));
+        assertEquals("+380636977529", PhoneNumberUtils.formatPhoneNumber(PhoneNumberUtils.parseNumber("+380", "0636977529")));
+        assertEquals("+380636977529", PhoneNumberUtils.formatPhoneNumber(PhoneNumberUtils.parseNumber("380", "0636977529")));
 
-    /*@Test
-    public void parsePhoneByGoogle() {
+        {
+            PhoneNumberHolder holder = formatPhoneNumberHolder(PhoneNumberUtils.parseNumber("+47", "45037118"));
+            assertEquals("+47", holder.getPrefix());
+            assertEquals("45037118", holder.getNational());
+            assertEquals("+4745037118", holder.getPhoneNumber());
+        }
 
-        // the test
-        Phonenumber.PhoneNumber obj = PhoneNumberUtils.parsePhoneByGoogle("0636977229", "380");
+        {
+            PhoneNumberHolder holder = formatPhoneNumberHolder(PhoneNumberUtils.parseNumber("380", "0636977529"));
+            assertEquals("+380", holder.getPrefix());
+            assertEquals("636977529", holder.getNational());
+            assertEquals("+380636977529", holder.getPhoneNumber());
+        }
+    }
 
-        assertNotNull(obj);
-        assertEquals(380, obj.getCountryCode());
-        assertEquals(636977529l, obj.getNationalNumber());
-    }*/
 
     private static List<String> createList(String...strings) {
         List<String> list = new ArrayList<>();

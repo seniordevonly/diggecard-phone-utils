@@ -7,21 +7,37 @@ package com.realtap.phone.beans;
  */
 public class PhoneNumberHolder {
 
-    private String countryCode;
-    private String shortPhoneNumber;
+    private String prefix;
+    private String national;
+    private String phoneNumber;
 
-    public PhoneNumberHolder(String countryCode, String shortPhoneNumber){
-        this.countryCode = countryCode;
-        this.shortPhoneNumber = shortPhoneNumber;
+
+    public PhoneNumberHolder(String prefix, String national) {
+        this.prefix = prefix;
+        this.national = national;
+    }
+
+    public PhoneNumberHolder(int prefix, long national, String phoneNumber) {
+        this.prefix = "+"+String.valueOf(prefix);
+        this.national = String.valueOf(national);
+        this.phoneNumber = phoneNumber;
+    }
+
+    public PhoneNumberHolder(String prefix, String national, String phoneNumber) {
+        this.prefix = prefix;
+        this.national = national;
+        this.phoneNumber = phoneNumber;
     }
 
 
-    public String getCountryCode() {
-        return countryCode;
+    public String getPrefix() {
+        return prefix;
     }
-    public String getShortPhoneNumber() {
-
-        return shortPhoneNumber;
+    public String getNational() {
+        return national;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 }

@@ -251,6 +251,13 @@ public class PhoneNumberUtils {
         return "+"+obj.getCountryCode() + obj.getNationalNumber();
     }
 
+    public static PhoneNumberHolder formatPhoneNumberHolder(PhoneNumber obj) {
+        if(obj == null) {
+            throw new PhoneNumberParsingException("Obj is null");
+        }
+        return new PhoneNumberHolder(obj.getCountryCode(), obj.getNationalNumber(), formatPhoneNumber(obj));
+    }
+
     public static boolean isValidFullPhoneNumberHelper(String fullPhoneNumber){
         try {
             PhoneNumber phoneNumber = phoneUtil.parse(fullPhoneNumber, UNKNOWN_REGION);
@@ -318,8 +325,9 @@ public class PhoneNumberUtils {
         } catch (Exception e) {
             return false;
         }
+        return true;
         //return !StringUtils.isEmpty(countryCode);
-        return countryCode != null && !countryCode.isEmpty();
+        //return countryCode != null && !countryCode.isEmpty();
     }
 
     public static String appendCountryCodeIfMissingAndNormalize(String phoneNumber, String phoneCountryCode) {
@@ -335,7 +343,7 @@ public class PhoneNumberUtils {
             region = phoneUtil.getRegionCodeForCountryCode(Integer.parseInt(countryCodeNum));
         }
 
-        PhoneNumber pNumber = null;
+        PhoneNumber pNumber;
         try {
             pNumber = phoneUtil.parse(phoneNumber, region);
         } catch (NumberParseException e) {
@@ -461,7 +469,6 @@ public class PhoneNumberUtils {
             else{
                 return new PhoneNumberHolder(null, phoneNumber);
             }
-            //throw new PhoneNumberParsingException(phoneNumber+" is not valid phone number");
         }
     }
 
