@@ -968,6 +968,22 @@ public class PhoneNumberUtilsUnitTest {
         }
     }
 
+    @Test
+    public void isThisValidNumber() {
+        assertTrue(PhoneNumberUtils.isValidFullPhoneNumberHelper("+40705394226"));
+    }
+
+    @Test
+    public void testIsValid() {
+        assertTrue(PhoneNumberUtils.isValidFullPhoneNumberHelper("+46793470020"));
+        assertTrue(PhoneNumberUtils.isValidFullPhoneNumberHelper("+61484128126"));
+    }
+
+    @Test
+    public void testIsPossible() {
+        assertTrue(PhoneNumberUtils.isPossibleFullPhoneNumber("+46793470020"));
+    }
+
 
     private static List<String> createList(String...strings) {
         List<String> list = new ArrayList<>();
