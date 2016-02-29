@@ -23,6 +23,7 @@ To release, first commit and push all changes, then run:
 $ mvn release:prepare
 $ mvn release:perform
 ```
-Will be published in Diggecard [Artifactory Repository](http://home.realtap.com/artifactory/repo)
+Will be published in Diggecard [Artifactory Repository](http://home.realtap.com/artifactory/repo).
+
 [Log in here](http://home.realtap.com/artifactory) with your account
 
