@@ -1,0 +1,14 @@
+env:
+  global:
+    - CODECOV_TOKEN=5ab6801c-7789-4b09-9a89-09ef5138e884
+
+language: java
+sudo: false # faster builds
+jdk:
+  - oraclejdk8
+
+before_install:
+  - pip install --user codecov
+
+after_success:
+  - codecov
