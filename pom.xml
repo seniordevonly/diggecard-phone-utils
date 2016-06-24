@@ -7,8 +7,8 @@
     <version>1.11-SNAPSHOT</version>
 
     <scm>
-        <connection>scm:git:ssh://git@dev.realtap.com:2222/phone-utils</connection>
-        <url>scm:git:ssh://git@ev.realtap.com:2222/phone-utils</url>
+        <connection>scm:git:ssh://git@github.com:seniordevonly/diggecard-phone-utils.git</connection>
+        <url>scm:git:ssh://git@github.com:seniordevonly/diggecard-phone-utils.git</url>
         <tag>HEAD</tag>
     </scm>
 
