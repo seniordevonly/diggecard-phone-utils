@@ -841,11 +841,11 @@ public class PhoneNumberUtilsUnitTest {
     @Test
     public void parseNumber() {
 
-        parseNumberSuccessHelper("+47", "45 45 45 45", 47, 45454545l);
-        parseNumberSuccessHelper("+47", "+47 45 45 45 45", 47, 45454545l);
-        parseNumberSuccessHelper("+47", "+4745454545", 47, 45454545l);
-        parseNumberSuccessHelper("+47", "+46 45 45 45 45", 46, 45454545l);
-        parseNumberSuccessHelper("+47", "4745 45 45 45", 47, 45454545l);
+        parseNumberSuccessHelper("+47", "45 45 45 45", 47, 45454545);
+        parseNumberSuccessHelper("+47", "+47 45 45 45 45", 47, 45454545);
+        parseNumberSuccessHelper("+47", "+4745454545", 47, 45454545);
+        parseNumberSuccessHelper("+47", "+46 45 45 45 45", 46, 45454545);
+        parseNumberSuccessHelper("+47", "4745 45 45 45", 47, 45454545);
 
         parseNumberFailureHelper("+47", "+45 45 45 45 65 565665");
         parseNumberFailureHelper("+47", "a lot of scrambed text");
