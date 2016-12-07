@@ -1008,9 +1008,9 @@ public class PhoneNumberUtilsUnitTest {
         assertFalse(PhoneNumberUtils.hasCountryCode(46, "+4736985214"));
     }
 
-    @Test(expected = PhoneNumberParsingException.class)
+    @Test
     public void testHasCountryCode_failNotFullNumber() {
-        assertTrue(PhoneNumberUtils.hasCountryCode(47, "45454545"));
+        assertFalse(PhoneNumberUtils.hasCountryCode(47, "45454545"));
     }
 
     @Test
