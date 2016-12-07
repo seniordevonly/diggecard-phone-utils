@@ -806,19 +806,21 @@ public class PhoneNumberUtilsUnitTest {
     }
 
     @Test
-    public void getCountryCodeFromFullPhoneNumber(){
+    public void getCountryCodeFromFullPhoneNumber() {
+        assertEquals(1, PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("+13037269121"));
+        assertEquals(1, PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("+14022458773"));
+        assertEquals(46, PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("+4645037118"));
+        assertEquals(47, PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("+4790630185"));
+    }
 
-        assertEquals("1", PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("+13037269121"));
-        try{
-            PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("3037261054");
-            fail("should fail");
-        }catch (PhoneNumberParsingException e){
-            assertNotNull(e);
-        }
-        assertEquals("1", PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("+14022458773"));
+    @Test(expected = PhoneNumberParsingException.class)
+    public void getCountryCodeFromFullPhoneNumber_failNotFullPhoneNumber() {
+        PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("3037261054");
+    }
 
-        assertEquals("46", PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("+4645037118"));
-        assertEquals("47", PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("+4790630185"));
+    @Test(expected = PhoneNumberParsingException.class)
+    public void getCountryCodeFromFullPhoneNumber_failMissingPlus() {
+        PhoneNumberUtils.getCountryCodeFromFullPhoneNumber("4790630185");
     }
 
     @Test
@@ -987,6 +989,34 @@ public class PhoneNumberUtilsUnitTest {
         assertTrue(isPossibleFullPhoneNumber("+46793470020"));
     }
 
+    @Test
+    public void normalizeNumber() {
+        String normalized = PhoneNumberUtils.appendCountryCodeIfMissingAndNormalize("45 03(7118)", "+47");
+        assertEquals("+4745037118", normalized);
+    }
+
+    @Test
+    public void testValidNumber() {
+        assertFalse(PhoneNumberUtils.isValidPhoneNumber("+47", "+4736985214"));
+        assertTrue(PhoneNumberUtils.isPossibleFullPhoneNumber("+4736985214"));
+        assertTrue(PhoneNumberUtils.isValidPhoneNumber("+47", "45037118"));
+    }
+
+    @Test
+    public void testHasCountryCode() {
+        assertTrue(PhoneNumberUtils.hasCountryCode(47, "+4736985214"));
+        assertFalse(PhoneNumberUtils.hasCountryCode(46, "+4736985214"));
+    }
+
+    @Test(expected = PhoneNumberParsingException.class)
+    public void testHasCountryCode_failNotFullNumber() {
+        assertTrue(PhoneNumberUtils.hasCountryCode(47, "45454545"));
+    }
+
+    @Test
+    public void testHasCountryCode_failNotPossibleNumber() {
+        assertFalse(PhoneNumberUtils.hasCountryCode(47, "+478587845454545"));
+    }
 
     private static List<String> createList(String...strings) {
         List<String> list = new ArrayList<>();

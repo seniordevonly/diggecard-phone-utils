@@ -7,9 +7,9 @@
     <version>1.11</version>
 
     <scm>
-        <connection>scm:git:ssh://git@github.com:seniordevonly/diggecard-phone-utils.git</connection>
-        <url>scm:git:ssh://git@github.com:seniordevonly/diggecard-phone-utils.git</url>
-        <tag>phone-utils-1.11</tag>
+        <connection>scm:git:ssh://git@github.com:seniordevonly/phone-utils.git</connection>
+        <url>scm:git:ssh://git@github.com:seniordevonly/phone-utils.git</url>
+        <tag>phone-utils-2.0-SNAPSHOT</tag>
     </scm>
 
     <repositories>
