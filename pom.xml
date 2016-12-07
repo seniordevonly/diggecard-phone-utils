@@ -7,8 +7,8 @@
     <version>2.2-SNAPSHOT</version>
 
     <scm>
-        <connection>scm:git:ssh://tha022@github.com:seniordevonly/phone-utils.git</connection>
-        <url>scm:git:ssh://tha022@github.com:seniordevonly/phone-utils.git</url>
+        <connection>scm:git:ssh://git@github.com:seniordevonly/phone-utils.git</connection>
+        <url>scm:git:ssh://git@github.com:seniordevonly/phone-utils.git</url>
         <tag>tag-phone-utils-${project.version}</tag>
     </scm>
 
