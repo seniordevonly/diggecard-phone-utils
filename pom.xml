@@ -9,7 +9,7 @@
     <scm>
         <connection>scm:git:ssh://github.com:seniordevonly/phone-utils.git</connection>
         <url>scm:git:ssh://github.com:seniordevonly/phone-utils.git</url>
-        <tag>phone-utils-2.0</tag>
+        <tag>phone-utils-${project.version}</tag>
     </scm>
 
     <repositories>
