@@ -4,7 +4,7 @@
 
     <groupId>com.seniordev</groupId>
     <artifactId>phone-utils</artifactId>
-    <version>2.0</version>
+    <version>2.1-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:ssh://github.com:seniordevonly/phone-utils.git</connection>
@@ -89,6 +89,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.0</version>
                 <configuration>
                     <!-- or whatever version you use -->
                     <source>1.8</source>
