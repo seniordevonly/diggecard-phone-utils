@@ -4,12 +4,12 @@
 
     <groupId>com.seniordev</groupId>
     <artifactId>phone-utils</artifactId>
-    <version>2.7</version>
+    <version>2.8-SNAPSHOT</version>
 
     <scm>
         <url>https://github.com/seniordevonly/phone-utils</url>
         <connection>scm:git:https://github.com/seniordevonly/phone-utils.git</connection>
-        <tag>phone-utils-2.7</tag>
+        <tag>tag-phone-utils-${project.version}</tag>
     </scm>
 
     <repositories>
