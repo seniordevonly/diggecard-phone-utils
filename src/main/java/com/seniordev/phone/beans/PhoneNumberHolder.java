@@ -1,4 +1,4 @@
-package com.realtap.phone.beans;
+package com.seniordev.phone.beans;
 
 /**
  * User: tha022

@@ -1,8 +1,8 @@
-package com.realtap.phone.utils;
+package com.seniordev.phone.utils;
 
 
-import com.realtap.phone.beans.PhoneNumberHolder;
-import com.realtap.phone.exceptions.PhoneNumberParsingException;
+import com.seniordev.phone.beans.PhoneNumberHolder;
+import com.seniordev.phone.exceptions.PhoneNumberParsingException;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.Phonenumber;

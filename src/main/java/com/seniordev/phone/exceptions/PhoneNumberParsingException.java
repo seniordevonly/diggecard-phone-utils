@@ -1,4 +1,4 @@
-package com.realtap.phone.exceptions;
+package com.seniordev.phone.exceptions;
 
 public class PhoneNumberParsingException extends RuntimeException {
 
