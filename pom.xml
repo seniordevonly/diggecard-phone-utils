@@ -4,7 +4,7 @@
 
     <groupId>com.seniordev</groupId>
     <artifactId>phone-utils</artifactId>
-    <version>2.3-SNAPSHOT</version>
+    <version>2.4-SNAPSHOT</version>
 
     <scm>
         <url>https://github.com/seniordevonly/phone-utils</url>
@@ -28,15 +28,16 @@
     <distributionManagement>
         <repository>
             <id>realtap</id>
-            <name>Artifact release repo</name>
-            <url>http://home.realtap.com/artifactory/libs-release-local/</url>
+            <name>realtap-releases</name>
+            <url>http://home.realtap.com/artifactory/libs-release-local</url>
         </repository>
         <snapshotRepository>
             <id>realtap</id>
-            <name>Artifact snapshot repo</name>
-            <url>http://home.realtap.com/artifactory/libs-snapshot-local/</url>
+            <name>realtap-snapshots</name>
+            <url>http://home.realtap.com/artifactory/libs-release-local</url>
         </snapshotRepository>
     </distributionManagement>
+
 
     <dependencies>
 
