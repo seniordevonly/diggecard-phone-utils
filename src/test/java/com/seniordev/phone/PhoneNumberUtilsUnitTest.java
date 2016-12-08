@@ -1018,6 +1018,41 @@ public class PhoneNumberUtilsUnitTest {
         assertFalse(PhoneNumberUtils.hasCountryCode(47, "+478587845454545"));
     }
 
+    @Test
+    public void testGenerateFullNorwegianPhoneNumber() {
+        assertEquals("+4745037118", PhoneNumberUtils.generateFullNorwegianPhoneNumber("45037118"));
+        assertEquals("+4790630185", PhoneNumberUtils.generateFullNorwegianPhoneNumber("906 (30) 185"));
+        assertEquals("+4790630185", PhoneNumberUtils.generateFullNorwegianPhoneNumber("+47 906 (30) 185"));
+        assertEquals("+4790630185", PhoneNumberUtils.generateFullNorwegianPhoneNumber("+4790630185"));
+    }
+
+    @Test(expected = PhoneNumberParsingException.class)
+    public void testGenerateFullNorwegianPhoneNumber_tooShort() {
+        PhoneNumberUtils.generateFullNorwegianPhoneNumber("4503711");
+    }
+
+    @Test(expected = PhoneNumberParsingException.class)
+    public void testGenerateFullNorwegianPhoneNumber_notValidPrefix() {
+        PhoneNumberUtils.generateFullNorwegianPhoneNumber("65037118");
+    }
+
+    @Test(expected = PhoneNumberParsingException.class)
+    public void testGenerateFullNorwegianPhoneNumber_notValidPrefix2() {
+        PhoneNumberUtils.generateFullNorwegianPhoneNumber("80630185");
+    }
+
+    @Test
+    public void testIsValidNorwegianPhoneNumber() {
+        assertTrue(PhoneNumberUtils.isValidNorwegianPhoneNumber("45037118"));
+        assertTrue(PhoneNumberUtils.isValidNorwegianPhoneNumber("906 (30) 185"));
+        assertTrue(PhoneNumberUtils.isValidNorwegianPhoneNumber("+47 906 (30) 185"));
+        assertTrue(PhoneNumberUtils.isValidNorwegianPhoneNumber("+4790630185"));
+
+        assertFalse(PhoneNumberUtils.isValidNorwegianPhoneNumber("800185"));
+        assertFalse(PhoneNumberUtils.isValidNorwegianPhoneNumber("80630185"));
+        assertFalse(PhoneNumberUtils.isValidNorwegianPhoneNumber("+47 80630185"));
+    }
+
     private static List<String> createList(String...strings) {
         List<String> list = new ArrayList<>();
         Collections.addAll(list, strings);

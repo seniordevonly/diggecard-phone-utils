@@ -222,6 +222,10 @@ public class PhoneNumberUtils {
         );
     }
 
+    public static boolean isValidNorwegianPhoneNumber(String phoneNumber) {
+        return isValidPhoneNumber("+47", phoneNumber);
+    }
+
     public static List<String> validatePhoneNumbers(List<String> numbers) {
         if(numbers == null) {
             return new ArrayList<>();
@@ -264,6 +268,13 @@ public class PhoneNumberUtils {
 
         // we give up
         return phoneNumber;
+    }
+
+    public static String generateFullNorwegianPhoneNumber(String phoneNumber) {
+        if(!isValidNorwegianPhoneNumber(phoneNumber)) {
+            throw new PhoneNumberParsingException("Not valid norwegian number: "+phoneNumber);
+        }
+        return generateFullPhoneNumber("+47", phoneNumber);
     }
 
     public static PhoneNumber parseNumber(String fullPhoneNumber, String defaultCountryCode, String phoneNumber) throws PhoneNumberParsingException {
