@@ -1047,10 +1047,17 @@ public class PhoneNumberUtilsUnitTest {
         assertTrue(PhoneNumberUtils.isValidNorwegianPhoneNumber("906 (30) 185"));
         assertTrue(PhoneNumberUtils.isValidNorwegianPhoneNumber("+47 906 (30) 185"));
         assertTrue(PhoneNumberUtils.isValidNorwegianPhoneNumber("+4790630185"));
+        assertTrue(PhoneNumberUtils.isValidNorwegianPhoneNumber("004741499915"));
+
 
         assertFalse(PhoneNumberUtils.isValidNorwegianPhoneNumber("800185"));
         assertFalse(PhoneNumberUtils.isValidNorwegianPhoneNumber("80630185"));
         assertFalse(PhoneNumberUtils.isValidNorwegianPhoneNumber("+47 80630185"));
+    }
+
+    @Test
+    public void testRonk() {
+        assertFalse(PhoneNumberUtils.isValidNorwegianPhoneNumber("4"));
     }
 
     private static List<String> createList(String...strings) {
