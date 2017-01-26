@@ -99,3 +99,5 @@ $ generateFullNorwegianPhoneNumber("45037118") => +4745037118
 $ generateFullNorwegianPhoneNumber("906 (30) 185") => +4790630185
 $ generateFullNorwegianPhoneNumber("+47 906 (30) 185") => +4790630185
 ```
+
+
