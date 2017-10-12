@@ -831,6 +831,7 @@ public class PhoneNumberUtilsUnitTest {
         assertEquals("+4745454545", PhoneNumberUtils.generateFullPhoneNumber("+47", "+4745454545"));
         assertEquals("+4645454545", PhoneNumberUtils.generateFullPhoneNumber("+47", "+46 45 45 45 45"));
         assertEquals("+4745454545", PhoneNumberUtils.generateFullPhoneNumber("+47", "4745 45 45 45"));
+        assertEquals("+380985777268", PhoneNumberUtils.generateFullPhoneNumber("+47", "+380985777268"));
         assertEquals("+4545454565565665", PhoneNumberUtils.generateFullPhoneNumber("+47", "+45 45 45 45 65 565665")); // not valid number
 
         assertTrue(PhoneNumberUtils.generateFullPhoneNumber("+47", "a lot of scrambed text").isEmpty());

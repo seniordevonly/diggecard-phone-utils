@@ -12,6 +12,20 @@
         <tag>tag-phone-utils-${project.version}</tag>
     </scm>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>tribe-artifactory-snapshot</id>
+            <name>tribe-artifactory-snapshots</name>
+            <url>http://artifactory.analytika.no:8081/artifactory/libs-snapshot</url>
+        </snapshotRepository>
+        <repository>
+            <id>tribe-artifactory-release</id>
+            <name>tribe-artifactory-releases</name>
+            <url>http://artifactory.analytika.no:8081/artifactory/libs-release</url>
+        </repository>
+    </distributionManagement>
+
+    <!--
     <repositories>
         <repository>
             <id>sdo-arficatory</id>
@@ -36,7 +50,34 @@
             <name>libs-snapshot</name>
             <url>http://home.realtap.com/artifactory/libs-release-local</url>
         </snapshotRepository>
-    </distributionManagement>
+    </distributionManagement> -->
+
+    <!--
+    <repositories>
+        <repository>
+            <id>sdo-arficatory</id>
+            <url>http://home.realtap.com/artifactory/repo/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>sdo-arficatory</id>
+            <url>http://home.realtap.com/artifactory/repo/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <distributionManagement>
+        <repository>
+            <id>sdo-arficatory</id>
+            <name>libs-release</name>
+            <url>http://home.realtap.com/artifactory/libs-release-local</url>
+        </repository>
+        <snapshotRepository>
+            <id>sdo-arficatory</id>
+            <name>libs-snapshot</name>
+            <url>http://home.realtap.com/artifactory/libs-release-local</url>
+        </snapshotRepository>
+    </distributionManagement> -->
 
 
     <dependencies>
