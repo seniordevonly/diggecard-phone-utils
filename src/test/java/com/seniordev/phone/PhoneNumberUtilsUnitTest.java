@@ -382,9 +382,15 @@ public class PhoneNumberUtilsUnitTest {
     }
 
     @Test
-    public void testInvalidAmericanNumber(){
+    public void testValidAmericanNumber(){
         boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+11323456716");
-        assertFalse(isValidPhoneNumber);
+        assertTrue(isValidPhoneNumber);
+    }
+
+    @Test
+    public void testValidAustralianNumber(){
+        boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+61436665835");
+        assertTrue(isValidPhoneNumber);
     }
 
     @Test
@@ -776,7 +782,7 @@ public class PhoneNumberUtilsUnitTest {
     }
 
     @Test
-    public void isPossibleButNotValidUkrainanPhoneNumber(){
+    public void isPossibleButNotValidUkrainianPhoneNumber(){
         String phoneNumber = "+380555555 ";
         assertFalse(PhoneNumberUtils.isValidFullPhoneNumberHelper(phoneNumber));
         assertTrue(isPossibleFullPhoneNumber(phoneNumber));
