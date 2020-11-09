@@ -4,24 +4,12 @@
 
     <groupId>com.seniordev</groupId>
     <artifactId>phone-utils</artifactId>
-    <version>2.14</version>
-
-    <scm>
-        <url>https://github.com/seniordevonly/phone-utils</url>
-        <connection>scm:git:https://github.com/seniordevonly/phone-utils.git</connection>
-        <tag>phone-utils-2.14</tag>
-    </scm>
+    <version>2.15</version>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>tribe-artifactory-snapshot</id>
-            <name>tribe-artifactory-snapshots</name>
-            <url>http://artifactory.analytika.no:8081/artifactory/libs-snapshot</url>
-        </snapshotRepository>
         <repository>
-            <id>tribe-artifactory-release</id>
-            <name>tribe-artifactory-releases</name>
-            <url>http://artifactory.analytika.no:8081/artifactory/libs-release</url>
+            <id>bsafe-artifacts-repository</id>
+            <url>s3://bsafe-artifacts-repository/release</url>
         </repository>
     </distributionManagement>
 
@@ -120,6 +108,13 @@
     </dependencies>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>com.allogy.maven.wagon</groupId>
+                <artifactId>maven-s3-wagon</artifactId>
+                <version>1.2.0</version>
+            </extension>
+        </extensions>
         <plugins>
 
             <plugin>

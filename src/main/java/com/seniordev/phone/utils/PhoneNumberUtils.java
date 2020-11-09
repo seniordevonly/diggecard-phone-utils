@@ -16,6 +16,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType.FIXED_LINE_OR_MOBILE;
+import static com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType.MOBILE;
+
 public class PhoneNumberUtils {
 
     private static Logger log = LoggerFactory.getLogger(PhoneNumberUtils.class);
@@ -377,7 +380,11 @@ public class PhoneNumberUtils {
         }
         phoneNumber = phoneUtil.format(pNumber, PhoneNumberFormat.E164);
 
-        if (!phoneUtil.isPossibleNumber(pNumber)) {
+        if (!(phoneUtil.getNumberType(pNumber) == MOBILE || phoneUtil.getNumberType(pNumber) == FIXED_LINE_OR_MOBILE)) {
+            throw new PhoneNumberParsingException("phone type invalid: " + phoneNumber);
+        }
+
+        if (!phoneUtil.isValidNumber(pNumber)) {
             throw new PhoneNumberParsingException("phone number invalid: " + phoneNumber);
         }
 

@@ -28,10 +28,12 @@ import static org.junit.Assert.fail;
 public class PhoneNumberUtilsUnitTest {
 
     //list of valid phone numbers for test. Dash used to separate prefix and number.
-    private ArrayList<String> phones = new ArrayList<String>(Arrays.asList( "+47-92610885" , "+46-15007500", "+47-92610886", "+380-672341136", "+1-7033196366", "+1-9173456789",
-            "+47-45037118", "+44-7511758131", "+44-7511758131", "+44-7956185515", "+39-06111122221"));
+    private final List<String> phones = new ArrayList<String>(Arrays.asList("+47-92610885", "+47-92610886", "+380-672341136", "+1-7033196366", "+1-9173456789",
+            "+47-45037118", "+44-7511758131", "+44-7511758131", "+44-7956185515"));
 
-    private ArrayList<String> specialPhones = new ArrayList<String>(Arrays.asList( "+39-055555555" , "+39-01111111", "+47-08888888","+44-07956185515"));
+    private final List<String> specialPhones = new ArrayList<String>(Arrays.asList("+44-07956185515"));
+
+    private final List<String> linePhones = new ArrayList<String>(Arrays.asList("+4615007500", "+39055555555", "+3901111111", "+3906111122221", "+4708888888"));
 
 
     @Test
@@ -404,8 +406,8 @@ public class PhoneNumberUtilsUnitTest {
         boolean isValidPhoneNumber = isPossibleFullPhoneNumber("+380555555");
         assertTrue(isValidPhoneNumber);
 
-        String normalized = PhoneNumberUtils.normalizePhoneNumber("+380555555");
-        assertEquals("+380555555", normalized);
+        String normalized = PhoneNumberUtils.normalizePhoneNumber("+380675555555");
+        assertEquals("+380675555555", normalized);
 
         assertFalse(PhoneNumberUtils.isValidFullPhoneNumberHelper("+380555555"));
     }
@@ -495,6 +497,14 @@ public class PhoneNumberUtilsUnitTest {
             assertNotNull(normalizedPhoneNumber);
         }
 
+        for (String number : linePhones) {
+            try {
+                PhoneNumberUtils.normalizePhoneNumber(number);
+                fail(String.format("Phone number \"%s\" is no mobile, should not be valid", number));
+            } catch (final PhoneNumberParsingException ex) {
+
+            }
+        }
     }
 
     @Test

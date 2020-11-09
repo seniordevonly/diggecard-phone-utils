@@ -1,3 +1,9 @@
+# bSafe fork
+To publish an artifact to S3:
+```shell script
+$ mvn clean deploy
+```
+
 # Phone utils
 A convenient phone library helping to work with phone numbers. 
 Built on top of [Google i18n Phone number lib](https://github.com/googlei18n/libphonenumber)
