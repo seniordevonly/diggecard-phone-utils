@@ -1,5 +1,20 @@
 # bSafe fork
 To publish an artifact to S3:
+Modify `~./m2/settings.xml`
+```xml
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">\
+
+    <servers>
+        <server>
+            <id>bsafe-artifacts-repository</id>
+            <username>aws_access_key_id</username>
+            <passphrase>aws_secret_access_key</passphrase>
+        </server>
+    </servers>
+
+</settings>
+```
 ```shell script
 $ mvn clean deploy
 ```
