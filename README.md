@@ -15,8 +15,10 @@ Modify `~./m2/settings.xml`
 
 </settings>
 ```
+where `aws_access_key_id` and `aws_secret_access_key` are AWS session credentials
+**USE JAVA 8**
 ```shell script
-$ mvn clean deploy
+$ JAVA_HOME=/opt/java/jdk1.8 && mvn clean deploy
 ```
 
 # Phone utils

@@ -33,7 +33,7 @@ public class PhoneNumberUtilsUnitTest {
 
     private final List<String> specialPhones = new ArrayList<String>(Arrays.asList("+44-07956185515"));
 
-    private final List<String> linePhones = new ArrayList<String>(Arrays.asList("+4615007500", "+39055555555", "+3901111111", "+3906111122221", "+4708888888"));
+    private final List<String> linePhones = new ArrayList<String>(Arrays.asList("+46243583228", "+4615007500", "+39055555555", "+3901111111", "+3906111122221"));
 
 
     @Test
@@ -500,9 +500,8 @@ public class PhoneNumberUtilsUnitTest {
         for (String number : linePhones) {
             try {
                 PhoneNumberUtils.normalizePhoneNumber(number);
-                fail(String.format("Phone number \"%s\" is no mobile, should not be valid", number));
             } catch (final PhoneNumberParsingException ex) {
-
+                fail(String.format("Phone number \"%s\" is no mobile, should not be valid", number));
             }
         }
     }
