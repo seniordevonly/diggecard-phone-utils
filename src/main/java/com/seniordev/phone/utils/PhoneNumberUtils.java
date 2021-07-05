@@ -346,6 +346,9 @@ public class PhoneNumberUtils {
         if (null == fullPhoneNumber) {
             return false;
         }
+        if (fullPhoneNumber.trim().contains(" ")) {
+            return false;
+        }
 
         String regexp = "((?:[a-z][a-z]+))";
         Pattern pattern = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
@@ -374,7 +377,7 @@ public class PhoneNumberUtils {
         }
         phoneNumber = phoneUtil.format(pNumber, PhoneNumberFormat.E164);
 
-        if (!phoneUtil.isPossibleNumber(pNumber)) {
+        if (!phoneUtil.isValidNumber(pNumber)) {
             throw new PhoneNumberParsingException("phone number invalid: " + phoneNumber);
         }
 
